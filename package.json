@@ -1,0 +1,24 @@
+{
+  "name": "openclaw-installer-openshift",
+  "version": "0.1.0",
+  "description": "OpenShift deployer plugin for openclaw-installer",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "@openclaw/installer": "^0.1.0"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "^1.4.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "typescript": "^5.6.0",
+    "@openclaw/installer": "file:../openclaw-installer"
+  }
+}
