@@ -18,9 +18,9 @@ The plugin depends on the installer's TypeScript types and exported modules, so 
 git clone https://github.com/sallyom/openclaw-installer.git
 git clone https://github.com/jwm4/openclaw-installer-openshift.git
 
-# 2. Check out the plugin system branch on the installer
+# 2. Check out the plugin system PR branch on the installer
 cd openclaw-installer
-git checkout deployer-plugin-system
+gh pr checkout 3
 
 # 3. Install and build the installer (build is required — the plugin imports from dist/)
 npm install
