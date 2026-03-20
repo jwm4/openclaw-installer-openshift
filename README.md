@@ -30,30 +30,7 @@ The plugin is discovered automatically at startup — no configuration needed.
 
 ## Development Setup
 
-To develop this plugin alongside openclaw-installer without modifying the installer's package.json:
-
-```bash
-# Clone both repos side by side
-git clone https://github.com/sallyom/openclaw-installer.git
-git clone https://github.com/jwm4/openclaw-installer-openshift.git
-
-# Build the plugin
-cd openclaw-installer-openshift
-npm install
-npm run build
-
-# Link into the installer (no package.json changes)
-npm link
-cd ../openclaw-installer
-npm link openclaw-installer-openshift
-
-# Start the dev server
-npm run dev
-```
-
-If you're logged into an OpenShift cluster (`oc login`), the OpenShift deployer will auto-detect and appear in the UI.
-
-Note: `npm install` in the installer removes the link. Re-run the `npm link` steps after installing new dependencies.
+See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for full step-by-step instructions including prerequisites, build order, npm link workflow, and troubleshooting.
 
 ## Architecture
 
