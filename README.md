@@ -37,31 +37,19 @@ The plugin is discovered automatically at startup — no configuration needed.
 - `oc` CLI (if testing against an OpenShift cluster)
 - `podman` or `docker` (if testing local deployments)
 
-### Step-by-step
-
-The plugin depends on the installer's TypeScript types and exported modules, so the **installer must be cloned and built first**.
+### Quick start
 
 ```bash
-# 1. Clone both repos side by side
 git clone https://github.com/sallyom/openclaw-installer.git
 git clone https://github.com/jwm4/openclaw-installer-openshift.git
+cd openclaw-installer-openshift
+./scripts/setup-dev.sh
+```
 
-# 2. Install and build the installer (build is required — the plugin imports from dist/)
-cd openclaw-installer
-npm install
-npm run build
+The script clones the installer if needed, builds both repos, and links the plugin. When it finishes, start the dev server:
 
-# 3. Install and build the plugin
-cd ../openclaw-installer-openshift
-npm install
-npm run build
-
-# 4. Link the plugin into the installer (creates a symlink, no package.json changes)
-npm link
+```bash
 cd ../openclaw-installer
-npm link openclaw-installer-openshift
-
-# 5. Start the dev server
 npm run dev
 ```
 
@@ -74,14 +62,16 @@ Plugins loaded. Registered deployers: local, kubernetes, openshift
 
 To test with OpenShift, log into your cluster first (`oc login`) then restart the dev server. The OpenShift card will auto-detect and appear in the UI.
 
-### Common issues
+### After `npm install`
 
-- **Plugin not showing up?** Make sure you built both repos (`npm run build` in each) and ran both `npm link` steps.
-- **TypeScript errors building the plugin?** Build the installer first — the plugin resolves types from `dist/`.
-- **Plugin disappeared after `npm install`?** `npm install` removes links. Re-run `npm link openclaw-installer-openshift` in the installer dir.
-- **Plugin changes not taking effect?** Rebuild the plugin (`npm run build`) and restart the installer dev server.
+`npm install` removes the plugin link. Re-run the setup script to restore it:
 
-See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for additional troubleshooting details.
+```bash
+cd openclaw-installer-openshift
+./scripts/setup-dev.sh
+```
+
+See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for manual steps and additional troubleshooting.
 
 ## Architecture
 
