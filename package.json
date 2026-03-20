@@ -11,6 +11,11 @@
   "peerDependencies": {
     "@openclaw/installer": "^0.1.0"
   },
+  "peerDependenciesMeta": {
+    "@openclaw/installer": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "@kubernetes/client-node": "^1.4.0",
     "js-yaml": "^4.1.0"
