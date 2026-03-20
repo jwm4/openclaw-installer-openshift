@@ -21,12 +21,29 @@ No cluster-admin is required. Uses SA-based OAuth (`user:info` scope).
 
 ## Install
 
+### Prerequisites
+
+- Node.js 20+
+- npm 10+
+- `oc` CLI, logged into your OpenShift cluster (`oc login`)
+
+### Steps
+
 ```bash
+# 1. Clone and build the installer
+git clone https://github.com/sallyom/openclaw-installer.git
 cd openclaw-installer
-npm install openclaw-installer-openshift
+npm install
+
+# 2. Install the OpenShift plugin
+npm install https://github.com/jwm4/openclaw-installer-openshift
+
+# 3. Build and start
+npm run build
+npm start
 ```
 
-The plugin is discovered automatically at startup — no configuration needed.
+The plugin is discovered automatically at startup. If you're logged into an OpenShift cluster, the OpenShift deployment option will appear in the UI at http://localhost:3000.
 
 ## Development Setup
 
