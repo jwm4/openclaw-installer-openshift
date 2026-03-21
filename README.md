@@ -1,108 +1,15 @@
-# openclaw-installer-openshift
+# openclaw-installer-openshift (retired)
 
-OpenShift deployer plugin for [openclaw-installer](https://github.com/sallyom/openclaw-installer). Adds OAuth proxy, Routes, and ServiceAccount support for deploying OpenClaw on OpenShift clusters.
+> **This repo was an experimental prototype and is now retired.** The OpenShift deployer plugin has been moved into the main installer repo at [`provider-plugins/openshift/`](https://github.com/sallyom/openclaw-installer/tree/main/provider-plugins/openshift).
 
-## What It Does
+## What happened
 
-When installed, this plugin:
+This repo originally implemented the OpenShift deployer as a separate npm package that plugged into [openclaw-installer](https://github.com/sallyom/openclaw-installer) via its deployer plugin system. It served as a proof-of-concept for the plugin architecture.
 
-1. **Auto-detects** OpenShift by checking for the `route.openshift.io` API group
-2. **Registers** an "openshift" deployer with priority 10 (auto-selected over plain K8s when both are available)
-3. **Wraps** the base KubernetesDeployer with OpenShift-specific resources:
-   - ServiceAccount with OAuth redirect annotation
-   - OAuth config secret (SA token + cookie secret for the proxy)
-   - Service with additional oauth-ui port (8443) and serving-cert annotation
-   - Route (TLS edge-terminated, targeting the OAuth proxy)
-   - Deployment patches: oauth-proxy sidecar, serviceAccountName, OAuth volumes
-   - OpenClaw config updated with Route URL for allowedOrigins
-4. **Fixes** a bug from the original claw-installer: Route deletion during teardown
+The plugin now ships as a built-in provider plugin inside the installer itself. No separate install is needed -- just `oc login` and start the installer.
 
-No cluster-admin is required. Uses SA-based OAuth (`user:info` scope).
+## Where to go
 
-## Install
-
-### Prerequisites
-
-- Node.js 20+
-- npm 10+
-- `oc` CLI, logged into your OpenShift cluster (`oc login`)
-
-### Steps
-
-```bash
-# 1. Clone the installer
-git clone https://github.com/sallyom/openclaw-installer.git
-cd openclaw-installer
-npm install
-
-# 2. Install the OpenShift plugin
-npm install https://github.com/jwm4/openclaw-installer-openshift
-
-# 3. Build and start
-npm run build
-npm start
-```
-
-Open http://localhost:3000 in your browser. If you're logged into an OpenShift cluster (`oc login`), the OpenShift deployment option will appear automatically.
-
-## Development Setup
-
-### Prerequisites
-
-- Node.js 20+
-- npm 10+
-- `oc` CLI (if testing against an OpenShift cluster)
-- `podman` or `docker` (if testing local deployments)
-
-### Quick start
-
-```bash
-git clone https://github.com/sallyom/openclaw-installer.git
-git clone https://github.com/jwm4/openclaw-installer-openshift.git
-cd openclaw-installer-openshift
-./scripts/setup-dev.sh
-```
-
-The script clones the installer if needed, builds both repos, and links the plugin. When it finishes, start the dev server:
-
-```bash
-cd ../openclaw-installer
-npm run dev
-```
-
-You should see in the terminal output:
-```
-Loading plugins...
-Loaded plugin: openclaw-installer-openshift
-Plugins loaded. Registered deployers: local, kubernetes, openshift
-```
-
-To test with OpenShift, log into your cluster first (`oc login`) then restart the dev server. The OpenShift card will auto-detect and appear in the UI.
-
-### After `npm install`
-
-`npm install` removes the plugin link. Re-run the setup script to restore it:
-
-```bash
-cd openclaw-installer-openshift
-./scripts/setup-dev.sh
-```
-
-See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for manual steps and additional troubleshooting.
-
-## Architecture
-
-The `OpenShiftDeployer` implements the `Deployer` interface by:
-
-1. Creating OpenShift prerequisites (SA, OAuth secret, namespace)
-2. Delegating to `KubernetesDeployer` for core K8s resources
-3. Patching the Service, Deployment, and ConfigMap with OpenShift additions
-4. Creating the Route and fetching the URL
-
-This approach avoids replicating the full K8s deploy logic while adding all required OpenShift resources. See [ADR 0001](adr/0001-openshift-deployer-plugin-design.md) for the full design rationale.
-
-## Documentation
-
-- [ADR 0001](adr/0001-openshift-deployer-plugin-design.md) -- design decisions
-- [Deploying on OpenShift](docs/deploy-openshift.md) -- full deployment guide
-- [docs/examples/](docs/examples/) -- annotated YAML examples
+- **OpenShift deployer source**: [`provider-plugins/openshift/`](https://github.com/sallyom/openclaw-installer/tree/main/provider-plugins/openshift) in openclaw-installer
+- **Deploy guide**: [`provider-plugins/openshift/docs/deploy-openshift.md`](https://github.com/sallyom/openclaw-installer/tree/main/provider-plugins/openshift/docs/deploy-openshift.md)
+- **Design ADR**: [`provider-plugins/openshift/adr/0001-openshift-deployer-plugin-design.md`](https://github.com/sallyom/openclaw-installer/tree/main/provider-plugins/openshift/adr/0001-openshift-deployer-plugin-design.md)
